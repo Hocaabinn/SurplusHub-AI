@@ -100,65 +100,97 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         fullName: string,
         role: 'consumer' | 'partner'
     ): Promise<SignUpResult> {
-        // 1. Create auth user — store profile data in user_metadata so it
-        //    survives even if the profile insert fails (e.g. RLS before
-        //    email verification).
-        const { data, error: authError } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                data: {
-                    full_name: fullName,
-                    role,
+        try {
+            // 1. Create auth user — store profile data in user_metadata so it
+            //    survives even if the profile insert fails (e.g. RLS before
+            //    email verification).
+            const { data, error: authError } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: fullName,
+                        role,
+                    },
                 },
-            },
-        });
+            });
 
-        if (authError) {
-            console.error('[signUp] Auth error:', authError);
-            return { error: authError.message, needsEmailVerification: false };
-        }
+            if (authError) {
+                console.error('[signUp] Auth error:', authError);
 
-        if (!data.user) {
-            return { error: 'Failed to create account.', needsEmailVerification: false };
-        }
+                // Handle rate limit error with a friendly message
+                if (
+                    authError.message?.toLowerCase().includes('rate limit') ||
+                    authError.status === 429
+                ) {
+                    return {
+                        error: 'Too many sign-up attempts. Please wait a few minutes before trying again.',
+                        needsEmailVerification: false,
+                    };
+                }
 
-        // 2. Check if we got a real session — if not, email confirmation is
-        //    required and the profile insert will likely be blocked by RLS.
-        const hasSession = !!data.session;
+                return { error: authError.message, needsEmailVerification: false };
+            }
 
-        // 3. Attempt to insert the profile row. This may fail when email
-        //    confirmation is enabled because auth.uid() is null in RLS.
-        const { error: profileError } = await supabase.from('profiles').insert({
-            id: data.user.id,
-            full_name: fullName,
-            role,
-        });
+            if (!data.user) {
+                return { error: 'Failed to create account.', needsEmailVerification: false };
+            }
 
-        if (profileError) {
-            console.error('[signUp] Profile insert error:', JSON.stringify(profileError, null, 2));
+            // Supabase returns a user with no identities when the email is
+            // already registered (to prevent email enumeration).
+            if (
+                data.user.identities &&
+                data.user.identities.length === 0
+            ) {
+                return {
+                    error: 'An account with this email already exists. Please sign in instead.',
+                    needsEmailVerification: false,
+                };
+            }
 
-            // If we have no session (email not confirmed yet), the insert
-            // failure is expected — the profile will be created on first
-            // login via fetchProfile's upsert fallback.
+            // 2. Check if we got a real session — if not, email confirmation is
+            //    required and the profile insert will likely be blocked by RLS.
+            const hasSession = !!data.session;
+
+            // 3. Attempt to insert the profile row. This may fail when email
+            //    confirmation is enabled because auth.uid() is null in RLS.
+            const { error: profileError } = await supabase.from('profiles').insert({
+                id: data.user.id,
+                full_name: fullName,
+                role,
+            });
+
+            if (profileError) {
+                console.error('[signUp] Profile insert error:', JSON.stringify(profileError, null, 2));
+
+                // If we have no session (email not confirmed yet), the insert
+                // failure is expected — the profile will be created on first
+                // login via fetchProfile's upsert fallback.
+                if (!hasSession) {
+                    return { error: null, needsEmailVerification: true };
+                }
+
+                // If we DO have a session but insert still failed, that's a real
+                // problem (schema mismatch, RLS misconfiguration, etc.).
+                return {
+                    error: `Account created but profile setup failed: ${profileError.message || profileError.code || 'Unknown error'}. Please try logging in — your profile will be set up automatically.`,
+                    needsEmailVerification: false,
+                };
+            }
+
+            // 4. Everything succeeded
             if (!hasSession) {
                 return { error: null, needsEmailVerification: true };
             }
 
-            // If we DO have a session but insert still failed, that's a real
-            // problem (schema mismatch, RLS misconfiguration, etc.).
+            return { error: null, needsEmailVerification: false };
+        } catch (err) {
+            console.error('[signUp] Unexpected error:', err);
             return {
-                error: `Account created but profile setup failed: ${profileError.message || profileError.code || 'Unknown error'}. Please try logging in — your profile will be set up automatically.`,
+                error: 'An unexpected error occurred. Please try again later.',
                 needsEmailVerification: false,
             };
         }
-
-        // 4. Everything succeeded
-        if (!hasSession) {
-            return { error: null, needsEmailVerification: true };
-        }
-
-        return { error: null, needsEmailVerification: false };
     }
 
     async function signOut() {

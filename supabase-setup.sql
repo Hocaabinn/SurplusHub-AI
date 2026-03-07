@@ -1,9 +1,4 @@
--- ============================================================================
--- PlateRescue — Supabase Database Setup
--- ============================================================================
--- Run this SQL in your Supabase Dashboard → SQL Editor → New Query
--- This will create all required tables, indexes, RLS policies, and storage.
--- ============================================================================
+
 
 -- 1. PROFILES TABLE
 -- Stores user profile information (linked to auth.users)
