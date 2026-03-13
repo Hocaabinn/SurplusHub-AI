@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { supabase } from '@/app/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import type { Product } from '@/types';
-import { X, CheckCircle, Minus, Plus, ShoppingBag, Copy, Check, LogIn, MapPin, Clock, PartyPopper } from 'lucide-react';
+import { X, CheckCircle, Minus, Plus, ShoppingBag, Copy, Check, LogIn, MapPin, Clock, PartyPopper, Brain } from 'lucide-react';
 import Link from 'next/link';
+import { calculateDynamicPrice } from '@/lib/dynamicPricing';
 
 interface ReservationModalProps {
     product: Product;
@@ -34,7 +35,16 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
     const [copied, setCopied] = useState(false);
 
     const maxQuantity = Math.min(product.stock_quantity, 5);
-    const totalPrice = product.discount_price * quantity;
+
+    // Use AI dynamic pricing
+    const dynamicPrice = calculateDynamicPrice(
+        product.original_price,
+        product.discount_price,
+        product.expiry_date,
+        product.created_at,
+    );
+    const unitPrice = dynamicPrice.currentPrice;
+    const totalPrice = unitPrice * quantity;
 
     async function handleConfirm() {
         if (!user) return;
@@ -301,12 +311,23 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
                                     <p className="text-sm text-muted">{product.stores?.name}</p>
                                     <div className="mt-1 flex items-baseline gap-2">
                                         <span className="text-lg font-bold text-primary">
-                                            Rp{product.discount_price.toLocaleString('id-ID')}
+                                            Rp{unitPrice.toLocaleString('id-ID')}
                                         </span>
-                                        <span className="text-xs text-gray-400 line-through">
+                                        {unitPrice < product.discount_price && (
+                                            <span className="text-xs text-gray-400 line-through">
+                                                Rp{product.discount_price.toLocaleString('id-ID')}
+                                            </span>
+                                        )}
+                                        <span className="text-xs text-gray-300 line-through">
                                             Rp{product.original_price.toLocaleString('id-ID')}
                                         </span>
                                     </div>
+                                    {dynamicPrice.dynamicDiscountPercent > 0 && (
+                                        <div className="mt-1 inline-flex items-center gap-1 rounded-md bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">
+                                            <Brain className="h-2.5 w-2.5" />
+                                            AI Price Drop -{dynamicPrice.dynamicDiscountPercent}%
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 

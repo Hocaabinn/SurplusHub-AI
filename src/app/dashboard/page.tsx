@@ -5,6 +5,8 @@ import { supabase } from '@/app/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import type { Store, Product } from '@/types';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import AiImageGenerator from '@/components/AiImageGenerator';
+import PremiumUpgradeModal from '@/components/PremiumUpgradeModal';
 import {
     Plus,
     Store as StoreIcon,
@@ -23,6 +25,8 @@ import {
     ImagePlus,
     X,
     Search,
+    Crown,
+    Brain,
 } from 'lucide-react';
 
 // ── Form types ──────────────────────────────────────────────────────────────────
@@ -72,7 +76,7 @@ const labelClass =
 // ── Page component ──────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
-    const { user } = useAuth();
+    const { user, profile } = useAuth();
 
     // Stores
     const [stores, setStores] = useState<Store[]>([]);
@@ -105,6 +109,11 @@ export default function DashboardPage() {
     const [verifyLoading, setVerifyLoading] = useState(false);
     const [verifyResult, setVerifyResult] = useState<{ title: string; customerName: string; quantity: number } | null>(null);
     const [verifyError, setVerifyError] = useState<string | null>(null);
+
+    // Premium & AI image
+    const [showPremiumModal, setShowPremiumModal] = useState(false);
+    const [isPremium, setIsPremium] = useState(false);
+    const [aiImageBlob, setAiImageBlob] = useState<Blob | null>(null);
 
     // ── Data fetching ─────────────────────────────────────────────────────────
 
@@ -147,6 +156,13 @@ export default function DashboardPage() {
     useEffect(() => {
         fetchListings();
     }, [fetchListings]);
+
+    // Fetch premium status
+    useEffect(() => {
+        if (profile) {
+            setIsPremium(!!profile.is_premium);
+        }
+    }, [profile]);
 
     // ── Store handlers ────────────────────────────────────────────────────────
 
@@ -760,6 +776,30 @@ export default function DashboardPage() {
                                 )}
                             </div>
 
+                            {/* ── AI Image Generator (Premium) ─────────────────── */}
+                            <div className="relative">
+                                <div className="mb-2 flex items-center gap-2">
+                                    <div className="h-px flex-1 bg-gray-200" />
+                                    <span className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">
+                                        <Brain className="h-3 w-3" />
+                                        atau
+                                    </span>
+                                    <div className="h-px flex-1 bg-gray-200" />
+                                </div>
+                                <AiImageGenerator
+                                    isPremium={isPremium}
+                                    foodTitle={foodForm.title}
+                                    onImageGenerated={(url, blob) => {
+                                        setImagePreview(url);
+                                        setAiImageBlob(blob);
+                                        // Create a File from the blob for the upload pipeline
+                                        const file = new File([blob], `ai-${Date.now()}.png`, { type: 'image/png' });
+                                        setImageFile(file);
+                                    }}
+                                    onUpgradeClick={() => setShowPremiumModal(true)}
+                                />
+                            </div>
+
                             {/* Success message */}
                             {foodSuccess && (
                                 <div className="flex items-center gap-2 rounded-xl bg-green-50 px-4 py-3 text-sm font-medium text-green-700 dark:bg-green-900/20 dark:text-green-400">
@@ -965,6 +1005,16 @@ export default function DashboardPage() {
 
                 </div>
             </div>
+
+            {/* Premium Upgrade Modal */}
+            <PremiumUpgradeModal
+                isOpen={showPremiumModal}
+                onClose={() => setShowPremiumModal(false)}
+                onUpgradeSuccess={() => {
+                    setIsPremium(true);
+                    setShowPremiumModal(false);
+                }}
+            />
         </ProtectedRoute>
     );
 }

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Leaf, Menu, X, Store, ShoppingBag, LogIn, LogOut, UserCircle, ScanBarcode } from 'lucide-react';
+import { Leaf, Menu, X, Store, ShoppingBag, LogIn, LogOut, UserCircle, ScanBarcode, Crown } from 'lucide-react';
 
 export default function Navbar() {
     const { user, profile, loading, signOut } = useAuth();
@@ -83,6 +83,12 @@ export default function Navbar() {
                                 <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold capitalize text-primary">
                                     {profile?.role || '...'}
                                 </span>
+                                {profile?.is_premium && (
+                                    <span className="flex items-center gap-0.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+                                        <Crown className="h-2.5 w-2.5" />
+                                        PRO
+                                    </span>
+                                )}
                             </div>
                             <button
                                 onClick={handleSignOut}
@@ -181,6 +187,12 @@ export default function Navbar() {
                                 <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold capitalize text-primary">
                                     {profile?.role}
                                 </span>
+                                {profile?.is_premium && (
+                                    <span className="flex items-center gap-0.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+                                        <Crown className="h-2.5 w-2.5" />
+                                        PRO
+                                    </span>
+                                )}
                             </div>
                             <button
                                 onClick={handleSignOut}

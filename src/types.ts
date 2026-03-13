@@ -19,6 +19,7 @@ export interface Product {
     expiry_date: string;
     image_url?: string;
     co2_saved: number;
+    created_at?: string;
     stores?: Store;
 }
 
@@ -46,5 +47,6 @@ export interface Profile {
     full_name: string;
     role: 'consumer' | 'partner';
     avatar_url?: string;
+    is_premium?: boolean;
     created_at?: string;
 }

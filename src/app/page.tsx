@@ -5,6 +5,7 @@ import { ArrowRight, MapPin, X, ChevronDown, Info } from 'lucide-react';
 import MapWrapper from '@/components/MapWrapper';
 import ProductGrid from '@/components/ProductGrid';
 import HowItWorks from '@/components/HowItWorks';
+import Pricing from '@/components/Pricing';
 import Image from 'next/image';
 import 'leaflet/dist/leaflet.css';
 
@@ -148,6 +149,11 @@ export default function Home() {
 
         <ProductGrid selectedStoreId={selectedStoreId} />
       </section>
+
+      {/* Pricing Section */}
+      <div id="pricing">
+        <Pricing />
+      </div>
     </div>
   );
 }
