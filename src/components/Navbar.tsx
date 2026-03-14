@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Leaf, Menu, X, Store, ShoppingBag, LogIn, LogOut, UserCircle, ScanBarcode, Crown } from 'lucide-react';
+import { Leaf, Menu, X, Store, ShoppingBag, LogIn, LogOut, UserCircle, ScanBarcode, Crown, BarChart3, Clock } from 'lucide-react';
 
 export default function Navbar() {
     const { user, profile, loading, signOut } = useAuth();
@@ -18,7 +18,7 @@ export default function Navbar() {
         <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-xl shadow-sm">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                 {/* Logo */}
-                <Link href="/" className="flex items-center gap-2 group">
+                <Link href={profile?.role === 'partner' ? '/merchant' : '/'} className="flex items-center gap-2 group">
                     <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-sm transition-transform group-hover:scale-105">
                         <Leaf className="h-5 w-5 animate-in" />
                     </div>
@@ -29,42 +29,48 @@ export default function Navbar() {
 
                 {/* Desktop nav */}
                 <div className="hidden items-center gap-1 md:flex">
-                    <Link
-                        href="/"
-                        className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-primary"
-                    >
-                        <ShoppingBag className="h-4 w-4" />
-                        Dashboard
-                    </Link>
-
-                    {/* Consumer Links */}
-                    {profile?.role === 'consumer' && (
-                        <Link
-                            href="/history"
-                            className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-primary"
-                        >
-                            <ShoppingBag className="h-4 w-4" />
-                            Riwayat
-                        </Link>
-                    )}
-
-                    {/* Partner Links */}
-                    {profile?.role === 'partner' && (
+                    {loading ? (
+                        <div className="flex gap-2">
+                            <div className="h-8 w-24 animate-pulse rounded-lg bg-gray-100" />
+                            <div className="h-8 w-24 animate-pulse rounded-lg bg-gray-100" />
+                        </div>
+                    ) : profile?.role === 'partner' ? (
+                        /* Partner Links */
                         <>
                             <Link
-                                href="/dashboard"
+                                href="/merchant"
                                 className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-primary"
                             >
                                 <Store className="h-4 w-4" />
-                                Merchant
+                                Merchant Panel
                             </Link>
                             <Link
-                                href="/partner/redeem"
+                                href="/partner/history"
                                 className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-primary"
                             >
-                                <ScanBarcode className="h-4 w-4" />
-                                Redeem
+                                <Clock className="h-4 w-4" />
+                                History
                             </Link>
+                        </>
+                    ) : (
+                        /* Regular / Consumer Links */
+                        <>
+                            <Link
+                                href="/"
+                                className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-primary"
+                            >
+                                <ShoppingBag className="h-4 w-4" />
+                                Marketplace
+                            </Link>
+                            {profile?.role === 'consumer' && (
+                                <Link
+                                    href="/history"
+                                    className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-primary"
+                                >
+                                    <ShoppingBag className="h-4 w-4" />
+                                    Riwayat
+                                </Link>
+                            )}
                         </>
                     )}
 
@@ -129,46 +135,52 @@ export default function Navbar() {
             {/* Mobile menu */}
             {mobileMenuOpen && (
                 <div className="animate-fade-in border-t border-gray-100 bg-white px-4 pb-4 pt-2 md:hidden">
-                    <Link
-                        href="/"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-primary"
-                    >
-                        <ShoppingBag className="h-4 w-4" />
-                        Marketplace
-                    </Link>
-
-                    {/* Consumer Links */}
-                    {profile?.role === 'consumer' && (
-                        <Link
-                            href="/history"
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-primary"
-                        >
-                            <ShoppingBag className="h-4 w-4" />
-                            Riwayat
-                        </Link>
-                    )}
-
-                    {/* Partner Links */}
-                    {profile?.role === 'partner' && (
+                    {loading ? (
+                        <div className="my-2 space-y-2">
+                            <div className="h-10 w-full animate-pulse rounded-lg bg-gray-100" />
+                            <div className="h-10 w-full animate-pulse rounded-lg bg-gray-100" />
+                        </div>
+                    ) : profile?.role === 'partner' ? (
+                        /* Partner Mobile Links */
                         <>
                             <Link
-                                href="/dashboard"
+                                href="/merchant"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-primary"
                             >
                                 <Store className="h-4 w-4" />
-                                Dashboard
+                                Merchant Panel
                             </Link>
                             <Link
-                                href="/partner/redeem"
+                                href="/partner/history"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-primary"
                             >
-                                <ScanBarcode className="h-4 w-4" />
-                                Redeem
+                                <Clock className="h-4 w-4" />
+                                History
                             </Link>
+                        </>
+                    ) : (
+                        /* Regular / Consumer Mobile Links */
+                        <>
+                            <Link
+                                href="/"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-primary"
+                            >
+                                <ShoppingBag className="h-4 w-4" />
+                                Marketplace
+                            </Link>
+                            {profile?.role === 'consumer' && (
+                                <Link
+                                    href="/history"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-primary"
+                                >
+                                    <ShoppingBag className="h-4 w-4" />
+                                    Riwayat
+                                </Link>
+                            )}
                         </>
                     )}
 

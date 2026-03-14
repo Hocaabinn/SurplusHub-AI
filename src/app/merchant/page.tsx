@@ -419,7 +419,7 @@ export default function DashboardPage() {
                             </div>
                             <div>
                                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                    Partner Dashboard
+                                    Merchant Panel
                                 </h1>
                                 <p className="text-sm text-muted">
                                     Manage your stores and surplus food listings

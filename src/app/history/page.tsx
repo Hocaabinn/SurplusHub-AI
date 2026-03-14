@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/app/lib/supabase';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { Order } from '@/types';
-import { Clock, CheckCircle, Store, Calendar, XCircle } from 'lucide-react';
+import { Clock, CheckCircle, Store, Calendar, XCircle, ShoppingBag } from 'lucide-react';
 
 export default function OrderHistoryPage() {
     const { user, loading: authLoading } = useAuth();
@@ -21,19 +21,24 @@ export default function OrderHistoryPage() {
                     .from('orders')
                     .select(`
                         *,
-                        products (
+                        products!inner (
                             title,
                             image_url,
-                            stores (
-                                name
+                            stores!inner (
+                                name,
+                                owner_id
                             )
                         )
                     `)
-                    .eq('user_id', user.id)
+                    .eq('products.stores.owner_id', user.id)
+                    .eq('status', 'completed')
                     .order('created_at', { ascending: false });
 
-                if (error) throw error;
-                // @ts-ignore - Supabase types are a bit tricky with joins, casting as any for now to avoid build errors if partial match
+                if (error) {
+                    console.error('Error dari database:', error);
+                }
+                
+                // @ts-ignore
                 setOrders(data || []);
             } catch (err) {
                 console.error('Error fetching orders:', err);
@@ -72,7 +77,7 @@ export default function OrderHistoryPage() {
                                 Belum ada pesanan
                             </h3>
                             <p className="text-gray-500 dark:text-gray-400">
-                                Yuk, selamatkan makanan dan bantu kurangi limbah!
+                                Belum ada makanan yang berhasil di-rescue pelanggan. Ayo terus update stok surplusmu!
                             </p>
                         </div>
                     ) : (
@@ -173,4 +178,3 @@ function Badge({ status }: { status: string }) {
     );
 }
 
-import { ShoppingBag } from 'lucide-react';

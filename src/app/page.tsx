@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { ArrowRight, MapPin, X, ChevronDown, Info, Sparkles } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import { ArrowRight, MapPin, X, ChevronDown, Info, Sparkles, Leaf } from 'lucide-react';
 import MapWrapper from '@/components/MapWrapper';
 import ProductGrid from '@/components/ProductGrid';
 import HowItWorks from '@/components/HowItWorks';
@@ -10,7 +12,30 @@ import Image from 'next/image';
 import 'leaflet/dist/leaflet.css';
 
 export default function Home() {
+  const { user, profile, loading } = useAuth();
+  const router = useRouter();
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
+
+  // Redirect partner users to the merchant panel
+  useEffect(() => {
+    if (!loading && user && profile?.role === 'partner') {
+      router.replace('/merchant');
+    }
+  }, [loading, user, profile, router]);
+
+  // Show spinner while auth is loading or partner redirect is pending
+  if (loading || (user && profile?.role === 'partner')) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary-dark shadow-lg shadow-green-500/20">
+          <Leaf className="h-7 w-7 animate-pulse text-white" />
+        </div>
+        <div className="h-1 w-32 overflow-hidden rounded-full bg-gray-100">
+          <div className="h-full w-1/2 animate-[shimmer_1.5s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-primary to-primary-light" />
+        </div>
+      </div>
+    );
+  }
 
   function handleMarkerClick(storeId: string) {
     setSelectedStoreId(storeId);

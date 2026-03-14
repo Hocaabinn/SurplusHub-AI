@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { Zap, Check, ArrowUpRight, Tag, Heart } from 'lucide-react';
 
@@ -23,7 +24,7 @@ export default function Pricing() {
     }, []);
 
     return (
-        <section ref={sectionRef} className="relative overflow-hidden bg-[#f5f5f5] pb-28">
+        <section ref={sectionRef} className="relative overflow-hidden bg-[#f5f5f5] pt-16 pb-24">
             <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 {/* ── Pricing Section ───────────────────────────── */}
                 <div
@@ -78,9 +79,14 @@ export default function Pricing() {
                             <p className="mt-5 text-sm leading-relaxed text-gray-500 font-medium">
                                 Ideal for businesses ready to explore AI and intelligent automation
                             </p>
-                            <button className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-white border border-[#A5C0A1]/30 px-6 py-3.5 text-sm font-semibold text-[#2D5A27] transition-all hover:bg-[#E8F0E8] hover:border-[#A5C0A1]">
+                            <Link
+                                href="https://surplushub.myr.id/membership/starter-tier-1-month"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-white border border-[#A5C0A1]/30 px-6 py-3.5 text-sm font-semibold text-[#2D5A27] transition-all hover:bg-[#E8F0E8] hover:border-[#A5C0A1]"
+                            >
                                 Get Started <ArrowUpRight className="h-4 w-4" />
-                            </button>
+                            </Link>
                             <div className="mt-8 mb-4 border-t border-dashed border-[#A5C0A1]/30" />
                             <ul className="flex flex-col gap-4">
                                 {['Basic AI Tools', 'Limited Automation Features', 'Real-Time Reporting',].map((feature) => (
@@ -106,9 +112,14 @@ export default function Pricing() {
                             <p className="mt-5 text-sm leading-relaxed text-[#2D5A27]/80 font-medium">
                                 Built for companies that want to gain an edge with AI-powered automation
                             </p>
-                            <button className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2D5A27] px-6 py-3.5 text-sm font-semibold text-white transition-all hover:bg-[#1F451A] hover:shadow-lg hover:shadow-[#2D5A27]/30">
+                            <Link
+                                href="https://surplushub.myr.id/membership/pro-tier-1-month"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-white border border-[#A5C0A1]/30 px-6 py-3.5 text-sm font-semibold text-[#2D5A27] transition-all hover:bg-[#E8F0E8] hover:border-[#A5C0A1]"
+                            >
                                 Get Started <ArrowUpRight className="h-4 w-4" />
-                            </button>
+                            </Link>
                             <div className="mt-8 mb-4 border-t border-dashed border-[#A5C0A1]/50" />
                             <ul className="flex flex-col gap-4">
                                 {['Advanced AI Tools', 'Customizable Workflows', 'AI-Powered Analytics', 'Premium Chatbot Features', 'Cross-Platform Integrations'].map((feature) => (
@@ -129,9 +140,14 @@ export default function Pricing() {
                             <p className="mt-5 text-sm leading-relaxed text-gray-500 font-medium">
                                 For businesses aiming to harness AI and automation to lead their industry
                             </p>
-                            <button className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-white border border-[#A5C0A1]/30 px-6 py-3.5 text-sm font-semibold text-[#2D5A27] transition-all hover:bg-[#E8F0E8] hover:border-[#A5C0A1]">
+                            <Link
+                                href="https://surplushub.myr.id/membership/enterprise-tier-1-month"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-white border border-[#A5C0A1]/30 px-6 py-3.5 text-sm font-semibold text-[#2D5A27] transition-all hover:bg-[#E8F0E8] hover:border-[#A5C0A1]"
+                            >
                                 Get Started <ArrowUpRight className="h-4 w-4" />
-                            </button>
+                            </Link>
                             <div className="mt-8 mb-4 border-t border-dashed border-[#A5C0A1]/30" />
                             <ul className="flex flex-col gap-4">
                                 {['Fully Customized AI Solutions', 'Unlimited Integrations', 'Advanced Reporting & Insights', 'Scalable AI Solutions', 'Team Collaboration Features', 'Priority Feature Access'].map((feature) => (
