@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight, MapPin, X, ChevronDown, Info } from 'lucide-react';
+import { ArrowRight, MapPin, X, ChevronDown, Info, Sparkles } from 'lucide-react';
 import MapWrapper from '@/components/MapWrapper';
 import ProductGrid from '@/components/ProductGrid';
 import HowItWorks from '@/components/HowItWorks';
@@ -19,6 +19,14 @@ export default function Home() {
   function clearFilter() {
     setSelectedStoreId(null);
   }
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -59,6 +67,7 @@ export default function Home() {
           <div className="animate-hero-slide-up-d3 mt-2 flex flex-col sm:flex-row items-center gap-4">
             <a
               href="#marketplace"
+              onClick={(e) => scrollToSection(e, 'marketplace')}
               className="group flex w-full sm:w-auto items-center justify-center gap-3 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white shadow-md shadow-primary/20 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30"
             >
               Jelajahi Makanan
@@ -69,6 +78,7 @@ export default function Home() {
 
             <a
               href="#how-it-works"
+              onClick={(e) => scrollToSection(e, 'how-it-works')}
               className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-white/60 px-8 py-3.5 text-sm font-semibold text-gray-800 border border-gray-200 shadow-sm backdrop-blur-md transition-all hover:bg-white/80"
             >
               Pelajari Cara Kerja
@@ -79,7 +89,7 @@ export default function Home() {
         {/* Bottom Center — Elegant Scroll Indicator */}
         <div className="animate-hero-slide-up-d5 absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
           <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-500">Scroll</span>
-          <a href="#how-it-works" className="flex flex-col items-center gap-2 group p-2">
+          <a href="#how-it-works" onClick={(e) => scrollToSection(e, 'how-it-works')} className="flex flex-col items-center gap-2 group p-2">
             <div className="h-12 w-px bg-gradient-to-b from-gray-300 to-transparent" />
             <ChevronDown className="h-4 w-4 text-gray-400 group-hover:text-primary transition-colors" />
           </a>
@@ -92,31 +102,38 @@ export default function Home() {
       </div>
 
       {/* Map Section */}
-      <section className="mx-auto max-w-6xl px-4 pb-12 sm:px-6 lg:px-8">
-        <div className="mb-5 flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-50">
-            <MapPin className="h-4.5 w-4.5 text-green-500" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-gray-900">Toko Terdekat</h2>
-            <p className="text-sm text-gray-400">Pilih marker untuk melihat makanan dari toko tersebut</p>
-          </div>
+      <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6 lg:px-8 pt-12">
+        <div className="mb-12 flex flex-col items-center text-center">
+          <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-2 text-xs font-bold uppercase tracking-[0.2em] text-gray-800 shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
+            <MapPin className="h-3.5 w-3.5 text-primary" />
+            Lokasi
+          </span>
+          <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl md:text-5xl">
+            Toko Terdekat
+          </h2>
+          <p className="mt-4 max-w-2xl text-base text-gray-600 sm:text-lg">
+            Jelajahi peta untuk menemukan toko, restoran, dan kafe di sekitar Anda yang memiliki surplus makanan lezat. Klik marker untuk melihat penawaran!
+          </p>
         </div>
 
         {/* Map with floating glass card */}
-        <div className="relative overflow-hidden rounded-2xl border border-gray-100 shadow-sm">
-          <MapWrapper
-            selectedStoreId={selectedStoreId}
-            onMarkerClick={handleMarkerClick}
-          />
+        <div className="relative overflow-hidden p-2 sm:p-4 rounded-3xl border border-gray-200/60 bg-white shadow-xl shadow-primary/5">
+          <div className="relative overflow-hidden rounded-2xl border border-gray-100 bg-gray-50/50">
+            <MapWrapper
+              selectedStoreId={selectedStoreId}
+              onMarkerClick={handleMarkerClick}
+            />
 
-          {/* Floating Glassmorphism Card */}
-          <div className="pointer-events-none absolute left-3 top-3 z-[400] max-w-[220px] rounded-2xl border border-white/30 bg-white/70 px-4 py-3 shadow-lg backdrop-blur-md">
-            <div className="flex items-start gap-2">
-              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-500" />
-              <p className="text-xs font-medium leading-snug text-gray-700">
-                Cari lokasi penyelamatan terdekat di peta
-              </p>
+            {/* Floating Glassmorphism Card */}
+            <div className="pointer-events-none absolute left-4 top-4 z-[400] max-w-[260px] rounded-2xl border border-white/40 bg-white/80 px-4 py-3.5 shadow-lg backdrop-blur-md">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 rounded-full bg-primary/10 p-1.5 text-primary">
+                  <Info className="h-4 w-4 shrink-0" />
+                </div>
+                <p className="text-xs font-medium leading-snug text-gray-700">
+                  Cari lokasi penyelamatan terdekat di peta dan klik marker untuk melihat makanan
+                </p>
+              </div>
             </div>
           </div>
         </div>

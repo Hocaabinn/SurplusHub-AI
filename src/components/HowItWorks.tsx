@@ -29,7 +29,7 @@ const steps = [
         title: 'Ambil di Lokasi',
         description:
             'Kunjungi toko pada waktu yang ditentukan untuk pickup pesananmu.',
-        image: '/card-pickup.png',
+        image: '/fitur3.mp4',
     },
 ];
 
