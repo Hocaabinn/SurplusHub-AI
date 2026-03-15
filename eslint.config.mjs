@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "check_db.js",
+    "check_db2.js",
+    "fetch_openapi.js",
   ]),
 ]);
 

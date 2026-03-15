@@ -39,8 +39,8 @@ export default function MapView({ selectedStoreId, onMarkerClick }: MapViewProps
         `);
             if (error) throw error;
             setStores(data || []);
-        } catch (err: any) {
-            console.error('Error fetching stores:', err?.message || err?.code || JSON.stringify(err));
+        } catch (err: unknown) {
+            console.error('Error fetching stores:', (err as Error)?.message || (err as { code?: string })?.code || JSON.stringify(err));
         } finally {
             setLoading(false);
         }
