@@ -96,9 +96,9 @@ npm run dev
 
 ---
 
-## 🎨 Vibecoding Process
+## 🎨  Process Development
 
-This project was developed using the **Vibecoding** philosophy:
+This project was developed using the **Process Development** philosophy:
 
 * **Intuitive Development:** Prioritizing speed and solution-oriented coding over rigid documentation.
 * **AI-Co-piloted:** Leveraging AI to handle complex backend logic (RLS, SQL injection, Dynamic Pricing) so the developer can focus on *Value* and *Vibe*.
