@@ -5,7 +5,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/app/lib/supabase';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { Order } from '@/types';
-import { Clock, CheckCircle, Store, Calendar, XCircle, ShoppingBag } from 'lucide-react';
+import OrderStatusBadge from '@/components/OrderStatusBadge';
+import { Store, Calendar, ShoppingBag } from 'lucide-react';
 
 export default function OrderHistoryPage() {
     const { user, loading: authLoading } = useAuth();
@@ -40,8 +41,7 @@ export default function OrderHistoryPage() {
                     console.error('Error dari database:', error);
                 }
                 
-                // @ts-ignore
-                setOrders(data || []);
+                setOrders((data || []) as unknown as Order[]);
             } catch (err) {
                 console.error('Error fetching orders:', err);
             } finally {
@@ -130,7 +130,7 @@ export default function OrderHistoryPage() {
                                                 <span className="block text-sm text-gray-500 dark:text-gray-400">Quantity</span>
                                                 <span className="font-medium text-gray-900 dark:text-white">{order.quantity}x</span>
                                             </div>
-                                            <Badge status={order.status} />
+                                            <OrderStatusBadge status={order.status} context="customer" />
                                         </div>
                                     </div>
 
@@ -152,31 +152,6 @@ export default function OrderHistoryPage() {
                 </div>
             </div>
         </ProtectedRoute>
-    );
-}
-
-function Badge({ status }: { status: string }) {
-    if (status === 'completed') {
-        return (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                <CheckCircle className="h-3.5 w-3.5" />
-                Selesai
-            </span>
-        );
-    }
-    if (status === 'cancelled') {
-        return (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400">
-                <XCircle className="h-3.5 w-3.5" />
-                Dibatalkan
-            </span>
-        );
-    }
-    return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
-            <Clock className="h-3.5 w-3.5" />
-            Menunggu Pengambilan
-        </span>
     );
 }
 

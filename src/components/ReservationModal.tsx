@@ -1,11 +1,23 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { supabase } from '@/app/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import type { Product } from '@/types';
-import { X, CheckCircle, Minus, Plus, ShoppingBag, Copy, Check, LogIn, MapPin, Clock, PartyPopper, Brain } from 'lucide-react';
-import Link from 'next/link';
+import {
+    X,
+    CheckCircle,
+    Minus,
+    Plus,
+    ShoppingBag,
+    Copy,
+    Check,
+    LogIn,
+    MapPin,
+    Clock,
+    Brain,
+} from 'lucide-react';
 import { calculateDynamicPrice } from '@/lib/dynamicPricing';
 
 interface ReservationModalProps {
@@ -26,7 +38,11 @@ function extractErrorMessage(err: unknown): string {
     return 'Unknown error occurred.';
 }
 
-export default function ReservationModal({ product, onClose, onSuccess }: ReservationModalProps) {
+export default function ReservationModal({
+    product,
+    onClose,
+    onSuccess,
+}: ReservationModalProps) {
     const { user, profile } = useAuth();
     const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -36,7 +52,6 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
 
     const maxQuantity = Math.min(product.stock_quantity, 5);
 
-    // Use AI dynamic pricing
     const dynamicPrice = calculateDynamicPrice(
         product.original_price,
         product.discount_price,
@@ -52,7 +67,6 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
         setError(null);
 
         try {
-            // Step 1: Check latest stock availability
             const { data: freshProduct, error: fetchError } = await supabase
                 .from('products')
                 .select('stock_quantity')
@@ -62,63 +76,24 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
             if (fetchError) throw new Error('Could not verify stock availability.');
             if (!freshProduct || freshProduct.stock_quantity < quantity) {
                 throw new Error(
-                    `Only ${freshProduct?.stock_quantity ?? 0} item(s) left in stock. Please reduce your quantity.`
+                    `Only ${freshProduct?.stock_quantity ?? 0} item(s) left in stock. Please reduce your quantity.`,
                 );
             }
 
-            // Step 2: Insert the order
             const code = generatePickupCode();
-            const { data: orderData, error: orderError } = await supabase
+            const { error: orderError } = await supabase
                 .from('orders')
                 .insert({
                     user_id: user.id,
                     product_id: product.id,
-                    store_id: product.store_id, // Explicitly link order to store
                     quantity,
                     total_price: totalPrice,
                     pickup_code: code,
                     status: 'pending',
-                })
-                .select('id')
-                .single();
+                });
 
             if (orderError) throw orderError;
 
-            // Step 3: Decrement stock — try RPC first, fallback to direct update
-            let stockUpdateFailed = false;
-            let stockErrorMsg = '';
-
-            try {
-                const { error: rpcError } = await supabase.rpc('decrement_stock', {
-                    p_id: product.id,
-                    qty: quantity,
-                });
-                if (rpcError) throw rpcError;
-            } catch {
-                // RPC not available — fallback to direct update with guard
-                const newStock = freshProduct.stock_quantity - quantity;
-                const { error: updateError, count } = await supabase
-                    .from('products')
-                    .update({ stock_quantity: newStock })
-                    .eq('id', product.id)
-                    .gte('stock_quantity', quantity);
-
-                if (updateError) {
-                    stockUpdateFailed = true;
-                    stockErrorMsg = updateError.message;
-                } else if (count === 0) {
-                    stockUpdateFailed = true;
-                    stockErrorMsg = 'Stock was modified by another user. Please try again.';
-                }
-            }
-
-            // Step 4: If stock update failed, rollback the order
-            if (stockUpdateFailed) {
-                await supabase.from('orders').delete().eq('id', orderData.id);
-                throw new Error(`Stock update failed: ${stockErrorMsg}`);
-            }
-
-            // Step 5: Success
             setPickupCode(code);
         } catch (err) {
             console.error('Reservation error:', err);
@@ -129,11 +104,11 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
     }
 
     async function handleCopyCode() {
-        if (pickupCode) {
-            await navigator.clipboard.writeText(pickupCode);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        }
+        if (!pickupCode) return;
+
+        await navigator.clipboard.writeText(pickupCode);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
     }
 
     return (
@@ -142,10 +117,9 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
             onClick={(e) => e.target === e.currentTarget && onClose()}
         >
             <div className="animate-scale-in w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl">
-                {/* Header */}
                 <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
                     <h2 className="text-lg font-bold text-gray-900">
-                        {pickupCode ? '🎉 Rescue Berhasil!' : 'Rescue This Food'}
+                        {pickupCode ? 'Rescue Berhasil!' : 'Rescue This Food'}
                     </h2>
                     <button
                         onClick={onClose}
@@ -156,16 +130,13 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
                 </div>
 
                 <div className="p-6">
-                    {/* Not logged in state */}
                     {!user ? (
                         <div className="flex flex-col items-center gap-5 text-center">
                             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
                                 <LogIn className="h-8 w-8 text-amber-600 dark:text-amber-400" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-900">
-                                    Login Required
-                                </h3>
+                                <h3 className="text-lg font-semibold text-gray-900">Login Required</h3>
                                 <p className="mt-1 text-sm text-muted">
                                     You need to be logged in to rescue food. Create a free account to get started!
                                 </p>
@@ -187,27 +158,22 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
                             </div>
                         </div>
                     ) : pickupCode ? (
-                        /* ✅ Success State */
                         <div className="flex flex-col items-center gap-6 text-center">
-                            {/* Animated success icon */}
                             <div className="relative">
-                                <div className="absolute inset-0 animate-ping rounded-full bg-green-400/30" style={{ animationDuration: '1.5s', animationIterationCount: '2' }} />
+                                <div
+                                    className="absolute inset-0 animate-ping rounded-full bg-green-400/30"
+                                    style={{ animationDuration: '1.5s', animationIterationCount: '2' }}
+                                />
                                 <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-emerald-600 shadow-lg shadow-green-500/30">
                                     <CheckCircle className="h-10 w-10 text-white" />
                                 </div>
                             </div>
 
-                            {/* Success heading */}
                             <div>
-                                <h3 className="text-2xl font-bold text-gray-900">
-                                    🎉 Rescue Berhasil!
-                                </h3>
-                                <p className="mt-1 text-sm text-muted">
-                                    Pesanan kamu telah dikonfirmasi
-                                </p>
+                                <h3 className="text-2xl font-bold text-gray-900">Rescue Berhasil!</h3>
+                                <p className="mt-1 text-sm text-muted">Pesanan kamu telah dikonfirmasi</p>
                             </div>
 
-                            {/* Pickup Code */}
                             <div className="w-full rounded-2xl border-2 border-dashed border-green-300 bg-green-50/80 p-5 dark:border-green-700 dark:bg-green-900/20">
                                 <p className="mb-2 text-xs font-medium uppercase tracking-wider text-green-600 dark:text-green-400">
                                     Kode Pickup
@@ -230,12 +196,11 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
                                 </div>
                                 {copied && (
                                     <p className="mt-2 text-xs font-medium text-green-600 dark:text-green-400">
-                                        ✓ Kode disalin!
+                                        Kode disalin.
                                     </p>
                                 )}
                             </div>
 
-                            {/* Order Summary */}
                             <div className="w-full space-y-3 rounded-xl bg-gray-50 p-4 text-left">
                                 <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                                     Detail Pesanan
@@ -245,7 +210,7 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
                                         <ShoppingBag className="h-4 w-4 text-gray-400" />
                                         <span className="text-gray-700">{product.title}</span>
                                     </div>
-                                    <span className="font-medium text-gray-900">×{quantity}</span>
+                                    <span className="font-medium text-gray-900">x{quantity}</span>
                                 </div>
                                 <div className="border-t border-gray-200 pt-2">
                                     <div className="flex items-center justify-between">
@@ -257,15 +222,14 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
                                 </div>
                             </div>
 
-                            {/* Store pickup info */}
                             <div className="flex w-full items-center gap-3 rounded-xl bg-amber-50 px-4 py-3 text-left dark:bg-amber-900/15">
                                 <MapPin className="h-5 w-5 flex-shrink-0 text-amber-500" />
                                 <p className="text-sm text-amber-700 dark:text-amber-400">
-                                    Tunjukkan kode ini di <strong>{product.stores?.name || 'toko'}</strong> untuk mengambil pesananmu.
+                                    Tunjukkan kode ini di{' '}
+                                    <strong>{product.stores?.name || 'toko'}</strong> untuk mengambil pesananmu.
                                 </p>
                             </div>
 
-                            {/* Action buttons */}
                             <div className="flex w-full flex-col gap-2">
                                 <Link
                                     href="/history"
@@ -275,7 +239,10 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
                                     Lihat Pesanan Saya
                                 </Link>
                                 <button
-                                    onClick={() => { onSuccess?.(); onClose(); }}
+                                    onClick={() => {
+                                        onSuccess?.();
+                                        onClose();
+                                    }}
                                     className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-50"
                                 >
                                     Tutup
@@ -283,16 +250,13 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
                             </div>
                         </div>
                     ) : (
-                        /* Booking Form */
                         <div className="flex flex-col gap-5">
-                            {/* Partner tester banner */}
                             {profile?.role === 'partner' && (
                                 <div className="rounded-lg bg-amber-50 px-4 py-2 text-xs font-medium text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">
-                                    🧪 As a Partner, you are rescuing this as a tester.
+                                    As a Partner, you are rescuing this as a tester.
                                 </div>
                             )}
 
-                            {/* Product info */}
                             <div className="flex gap-4">
                                 <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl bg-green-50 dark:bg-green-900/20">
                                     {product.image_url ? (
@@ -324,7 +288,7 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
                                         </span>
                                     </div>
                                     {dynamicPrice.dynamicDiscountPercent > 0 && (
-                                        <div className="mt-1 inline-flex items-center gap-1 rounded-md bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">
+                                        <div className="mt-1 inline-flex items-center gap-1 rounded-md border border-emerald-200 bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">
                                             <Brain className="h-2.5 w-2.5" />
                                             AI Price Drop -{dynamicPrice.dynamicDiscountPercent}%
                                         </div>
@@ -332,11 +296,8 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
                                 </div>
                             </div>
 
-                            {/* Quantity selector */}
                             <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3">
-                                <span className="text-sm font-medium text-gray-700">
-                                    Quantity
-                                </span>
+                                <span className="text-sm font-medium text-gray-700">Quantity</span>
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -358,7 +319,6 @@ export default function ReservationModal({ product, onClose, onSuccess }: Reserv
                                 </div>
                             </div>
 
-                            {/* Total */}
                             <div className="flex items-center justify-between rounded-xl border-2 border-green-100 px-4 py-3 dark:border-green-900/30">
                                 <span className="text-sm font-medium text-gray-600">Total</span>
                                 <span className="text-xl font-bold text-primary">

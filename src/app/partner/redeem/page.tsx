@@ -7,6 +7,36 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { ScanBarcode, Search, CheckCircle, XCircle, Package, User as UserIcon } from 'lucide-react';
 import { Order } from '@/types';
 
+type RedeemOrder = Order & {
+    profiles?: {
+        full_name?: string;
+        role?: string;
+    };
+    products?: {
+        title: string;
+        image_url?: string;
+        store_id?: string;
+        stores?: {
+            owner_id?: string;
+        };
+    } | null;
+};
+
+function normalizeProductRelation(productRelation: unknown) {
+    const product = Array.isArray(productRelation) ? productRelation[0] : productRelation;
+    if (!product || typeof product !== 'object') {
+        return null;
+    }
+
+    const stores = (product as { stores?: unknown }).stores;
+    const store = Array.isArray(stores) ? stores[0] : stores;
+
+    return {
+        ...(product as Record<string, unknown>),
+        stores: store && typeof store === 'object' ? store : undefined,
+    };
+}
+
 export default function PartnerRedeemPage() {
     const { user } = useAuth();
     const [pickupCode, setPickupCode] = useState('');
@@ -14,26 +44,35 @@ export default function PartnerRedeemPage() {
     const [result, setResult] = useState<{
         success: boolean;
         message: string;
-        order?: Order;
+        order?: RedeemOrder;
     } | null>(null);
 
     async function handleRedeem(e: React.FormEvent) {
         e.preventDefault();
-        if (!pickupCode.trim()) return;
+        if (!user || !pickupCode.trim()) return;
 
         setLoading(true);
         setResult(null);
 
         try {
+            const normalizedPickupCode = pickupCode.trim().toUpperCase();
+
             // 1. Find the order
             const { data: orders, error: searchError } = await supabase
                 .from('orders')
                 .select(`
                     *,
-                    products (title, image_url),
+                    products (
+                        title,
+                        image_url,
+                        store_id,
+                        stores (
+                            owner_id
+                        )
+                    ),
                     profiles:user_id (full_name, role)
                 `)
-                .eq('pickup_code', pickupCode.trim())
+                .eq('pickup_code', normalizedPickupCode)
                 .limit(1);
 
             if (searchError) throw searchError;
@@ -46,23 +85,36 @@ export default function PartnerRedeemPage() {
                 return;
             }
 
-            const order = orders[0] as any; // Type assertion for joined data
+            const order = orders[0] as RedeemOrder;
+            const normalizedProduct = normalizeProductRelation(order.products);
+            const normalizedOrder: RedeemOrder = {
+                ...order,
+                products: normalizedProduct as RedeemOrder['products'],
+            };
 
-            // 2. Validate status
-            if (order.status === 'completed') {
+            if ((normalizedProduct as { stores?: { owner_id?: string } } | null)?.stores?.owner_id !== user.id) {
                 setResult({
                     success: false,
-                    message: 'Pesanan ini sudah diambil sebelumnya.',
-                    order
+                    message: 'Pesanan ini tidak terdaftar pada toko Anda.'
                 });
                 return;
             }
 
-            if (order.status === 'cancelled') {
+            // 2. Validate status
+            if (normalizedOrder.status === 'completed') {
+                setResult({
+                    success: false,
+                    message: 'Pesanan ini sudah diambil sebelumnya.',
+                    order: normalizedOrder
+                });
+                return;
+            }
+
+            if (normalizedOrder.status === 'cancelled') {
                 setResult({
                     success: false,
                     message: 'Pesanan ini telah dibatalkan.',
-                    order
+                    order: normalizedOrder
                 });
                 return;
             }
@@ -78,11 +130,11 @@ export default function PartnerRedeemPage() {
             setResult({
                 success: true,
                 message: 'Pesanan berhasil diverifikasi dan diselesaikan!',
-                order: { ...order, status: 'completed' }
+                order: { ...normalizedOrder, status: 'completed' }
             });
             setPickupCode('');
 
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Redeem error:', err);
             setResult({
                 success: false,
@@ -188,7 +240,7 @@ export default function PartnerRedeemPage() {
                                             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                                                 <UserIcon className="h-4 w-4" />
                                                 <span className="font-medium">
-                                                    Pemesan: {(result.order as any).profiles?.full_name || 'User'}
+                                                    Pemesan: {result.order.profiles?.full_name || 'User'}
                                                 </span>
                                             </div>
                                         </div>

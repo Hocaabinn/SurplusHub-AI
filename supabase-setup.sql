@@ -135,6 +135,33 @@ CREATE TABLE IF NOT EXISTS public.orders (
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
+ALTER TABLE public.orders
+    ADD COLUMN IF NOT EXISTS status TEXT;
+
+UPDATE public.orders
+SET status = 'pending'
+WHERE status IS NULL;
+
+ALTER TABLE public.orders
+    ALTER COLUMN status SET DEFAULT 'pending';
+
+ALTER TABLE public.orders
+    ALTER COLUMN status SET NOT NULL;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'orders_status_check'
+    ) THEN
+        ALTER TABLE public.orders
+            ADD CONSTRAINT orders_status_check
+            CHECK (status IN ('pending', 'completed', 'cancelled'));
+    END IF;
+END
+$$;
+
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
 
 -- Users can view their own orders
@@ -180,6 +207,33 @@ CREATE POLICY "Partners can update orders for their products"
 CREATE POLICY "Users can delete own orders"
     ON public.orders FOR DELETE
     USING (auth.uid() = user_id);
+
+CREATE OR REPLACE FUNCTION public.reduce_product_stock()
+RETURNS TRIGGER AS $$
+DECLARE
+    affected_rows INTEGER;
+BEGIN
+    UPDATE public.products
+    SET stock_quantity = stock_quantity - NEW.quantity
+    WHERE id = NEW.product_id
+      AND stock_quantity >= NEW.quantity;
+
+    GET DIAGNOSTICS affected_rows = ROW_COUNT;
+
+    IF affected_rows = 0 THEN
+        RAISE EXCEPTION 'Insufficient stock for product %', NEW.product_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trigger_reduce_stock ON public.orders;
+
+CREATE TRIGGER trigger_reduce_stock
+AFTER INSERT ON public.orders
+FOR EACH ROW
+EXECUTE FUNCTION public.reduce_product_stock();
 
 -- 5. INDEXES for performance
 -- ============================================================================
