@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -23,10 +24,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
-      <body className={`font-sans antialiased`}>
+      <body className={`font-sans antialiased flex flex-col min-h-screen`}>
         <AuthProvider>
           <Navbar />
-          <main>{children}</main>
+          <main className="flex-grow">{children}</main>
+          <Footer />
         </AuthProvider>
       </body>
     </html>

@@ -19,9 +19,11 @@ export default function Navbar() {
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                 {/* Logo */}
                 <Link href={profile?.role === 'partner' ? '/merchant' : '/'} className="flex items-center gap-2 group">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-sm transition-transform group-hover:scale-105">
-                        <Leaf className="h-5 w-5 animate-in" />
-                    </div>
+                    <img 
+                        src="/favicon.png" 
+                        alt="SurplusHub Logo" 
+                        className="h-8 w-8 transition-transform group-hover:scale-105"
+                    />
                     <span className="text-xl font-bold tracking-tight text-gray-900">
                         Surplus<span className="text-primary">Hub</span>
                     </span>

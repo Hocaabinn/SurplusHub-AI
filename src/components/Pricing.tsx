@@ -73,7 +73,7 @@ export default function Pricing() {
                         <div className="group relative flex flex-col rounded-[2rem] bg-[#F7FAF7] p-8 shadow-[0_4px_20px_rgba(45,90,39,0.03)] border border-[#A5C0A1]/20 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(45,90,39,0.2)] flex-1">
                             <h3 className="text-lg font-bold text-[#2D5A27]">Starter</h3>
                             <div className="mt-4 flex items-baseline text-5xl font-extrabold tracking-tight text-gray-900">
-                                ${isYearly ? '20' : '10'}
+                                ${isYearly ? '20' : '5'}
                                 <span className="ml-1 text-base font-medium text-gray-500">/month</span>
                             </div>
                             <p className="mt-5 text-sm leading-relaxed text-gray-500 font-medium">
@@ -106,7 +106,7 @@ export default function Pricing() {
                             </div>
                             <h3 className="text-lg font-bold text-[#1F451A] mt-2">Pro</h3>
                             <div className="mt-4 flex items-baseline text-5xl font-extrabold tracking-tight text-[#1F451A]">
-                                ${isYearly ? '65' : '50'}
+                                ${isYearly ? '65' : '10'}
                                 <span className="ml-1 text-base font-medium text-[#2D5A27]/70">/month</span>
                             </div>
                             <p className="mt-5 text-sm leading-relaxed text-[#2D5A27]/80 font-medium">
@@ -134,7 +134,7 @@ export default function Pricing() {
                         <div className="group relative flex flex-col rounded-[2rem] bg-[#F7FAF7] p-8 shadow-[0_4px_20px_rgba(45,90,39,0.03)] border border-[#A5C0A1]/20 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(45,90,39,0.2)] flex-1">
                             <h3 className="text-lg font-bold text-[#2D5A27]">Enterprise</h3>
                             <div className="mt-4 flex items-baseline text-5xl font-extrabold tracking-tight text-gray-900">
-                                ${isYearly ? '450' : '80'}
+                                ${isYearly ? '450' : '25'}
                                 <span className="ml-1 text-base font-medium text-gray-500">/month</span>
                             </div>
                             <p className="mt-5 text-sm leading-relaxed text-gray-500 font-medium">

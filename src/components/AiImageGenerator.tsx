@@ -53,8 +53,9 @@ function generatePlaceholderImage(foodTitle: string, style: string): Promise<{ u
             hash = ((hash << 5) - hash) + char;
             hash = hash & hash;
         }
+        hash = Math.abs(hash); // Force positive to avoid negative radius later
 
-        const hue1 = Math.abs(hash % 360);
+        const hue1 = hash % 360;
         const hue2 = (hue1 + 40) % 360;
         const hue3 = (hue1 + 80) % 360;
 
@@ -265,22 +266,7 @@ export default function AiImageGenerator({
                 </div>
             </div>
 
-            {/* Style selector */}
-            <div className="mb-3 flex gap-1.5">
-                {STYLE_PRESETS.map((style) => (
-                    <button
-                        key={style.id}
-                        onClick={() => setSelectedStyle(style.id)}
-                        className={`flex flex-1 flex-col items-center gap-0.5 rounded-lg px-2 py-1.5 text-[10px] font-medium transition-all ${selectedStyle === style.id
-                            ? 'bg-purple-600 text-white shadow-md shadow-purple-500/30'
-                            : 'bg-white/70 text-gray-600 hover:bg-white'
-                            }`}
-                    >
-                        <span className="text-sm">{style.icon}</span>
-                        <span>{style.label}</span>
-                    </button>
-                ))}
-            </div>
+
 
             {/* Generated image preview */}
             {generatedImage && (

@@ -182,8 +182,8 @@ export default function DashboardPage() {
                 owner_id: user.id,
                 name: storeForm.name,
                 address: storeForm.address,
-                latitude: Number(storeForm.latitude),
-                longitude: Number(storeForm.longitude),
+                latitude: storeForm.latitude ? Number(storeForm.latitude) : 0,
+                longitude: storeForm.longitude ? Number(storeForm.longitude) : 0,
             });
             if (error) throw error;
 
@@ -512,14 +512,13 @@ export default function DashboardPage() {
                                         <div>
                                             <label className={labelClass}>
                                                 <MapPin className="h-4 w-4 text-muted" />
-                                                Latitude
+                                                Latitude (Opsional)
                                             </label>
                                             <input
                                                 type="number"
                                                 name="latitude"
                                                 value={storeForm.latitude}
                                                 onChange={handleStoreChange}
-                                                required
                                                 step="any"
                                                 placeholder="-6.2088"
                                                 className={inputClass}
@@ -528,14 +527,13 @@ export default function DashboardPage() {
                                         <div>
                                             <label className={labelClass}>
                                                 <MapPin className="h-4 w-4 text-muted" />
-                                                Longitude
+                                                Longitude (Opsional)
                                             </label>
                                             <input
                                                 type="number"
                                                 name="longitude"
                                                 value={storeForm.longitude}
                                                 onChange={handleStoreChange}
-                                                required
                                                 step="any"
                                                 placeholder="106.8456"
                                                 className={inputClass}

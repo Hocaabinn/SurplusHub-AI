@@ -41,9 +41,11 @@ export default function LoginPage() {
             <div className="relative w-full max-w-md">
                 {/* Logo */}
                 <div className="mb-8 flex flex-col items-center">
-                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary-dark shadow-lg shadow-green-500/20">
-                        <Leaf className="h-7 w-7 text-white" />
-                    </div>
+                    <img 
+                        src="/favicon.png" 
+                        alt="SurplusHub Logo" 
+                        className="mb-4 h-14 w-14 drop-shadow-sm"
+                    />
                     <h1 className="text-2xl font-bold text-gray-900">
                         Welcome back
                     </h1>

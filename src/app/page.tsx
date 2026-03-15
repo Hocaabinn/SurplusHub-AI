@@ -161,6 +161,11 @@ export default function Home() {
               </div>
             </div>
           </div>
+          
+          <div className="mt-3 text-center flex items-center justify-center gap-1.5 text-xs text-gray-500 font-medium">
+            <Info className="h-3.5 w-3.5" />
+            <span>Noted: Aktifkan lokasi di device anda</span>
+          </div>
         </div>
       </section>
 
