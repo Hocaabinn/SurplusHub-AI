@@ -41,16 +41,16 @@ export default function LoginPage() {
             <div className="relative w-full max-w-md">
                 {/* Logo */}
                 <div className="mb-8 flex flex-col items-center">
-                    <img 
-                        src="/favicon.png" 
-                        alt="SurplusHub Logo" 
+                    <img
+                        src="/favicon.png"
+                        alt="SurplusHub Logo"
                         className="mb-4 h-14 w-14 drop-shadow-sm"
                     />
                     <h1 className="text-2xl font-bold text-gray-900">
                         Welcome back
                     </h1>
                     <p className="mt-1 text-sm text-muted">
-                        Sign in to your PlateRescue account
+                        Sign in to your SurplusHub account
                     </p>
                 </div>
 

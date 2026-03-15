@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { ArrowRight, MapPin, X, ChevronDown, Info, Sparkles, Leaf } from 'lucide-react';
+import { ArrowRight, MapPin, X, Info, Sparkles, Leaf } from 'lucide-react';
 import MapWrapper from '@/components/MapWrapper';
 import ProductGrid from '@/components/ProductGrid';
 import HowItWorks from '@/components/HowItWorks';
@@ -112,13 +112,6 @@ export default function Home() {
         </div>
 
         {/* Bottom Center — Elegant Scroll Indicator */}
-        <div className="animate-hero-slide-up-d5 absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
-          <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-500">Scroll</span>
-          <a href="#how-it-works" onClick={(e) => scrollToSection(e, 'how-it-works')} className="flex flex-col items-center gap-2 group p-2">
-            <div className="h-12 w-px bg-gradient-to-b from-gray-300 to-transparent" />
-            <ChevronDown className="h-4 w-4 text-gray-400 group-hover:text-primary transition-colors" />
-          </a>
-        </div>
       </section>
 
       {/* How It Works Section */}
