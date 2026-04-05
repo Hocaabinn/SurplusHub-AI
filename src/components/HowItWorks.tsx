@@ -13,11 +13,7 @@ const steps = [
         title: 'Pilih Makanan',
         description:
             'Temukan surplus makanan berkualitas dari toko-toko favoritmu di sekitar lokasi dengan cepat dan mudah.',
-<<<<<<< HEAD
-        image: '/fitur2.mp4',
-=======
         image: '/Fitur2.mp4',
->>>>>>> 59078d26e018fb5fe874e988daee85ba0518157d
     },
     {
         icon: Wallet,
@@ -25,11 +21,7 @@ const steps = [
         title: 'Pesan & Bayar',
         description:
             'Amankan porsimu dengan harga yang jauh lebih hemat. Bayar langsung dari aplikasi.',
-<<<<<<< HEAD
-        image: '/fitur1.mp4',
-=======
         image: '/Fitur1.mp4',
->>>>>>> 59078d26e018fb5fe874e988daee85ba0518157d
     },
     {
         icon: Store,
@@ -37,11 +29,7 @@ const steps = [
         title: 'Ambil di Lokasi',
         description:
             'Kunjungi toko pada waktu yang ditentukan untuk pickup pesananmu.',
-<<<<<<< HEAD
-        image: '/fitur3.mp4',
-=======
         image: '/Fitur3.mp4',
->>>>>>> 59078d26e018fb5fe874e988daee85ba0518157d
     },
 ];
 
@@ -121,7 +109,7 @@ export default function HowItWorks() {
     return (
         <section
             ref={sectionRef}
-            className="relative overflow-hidden bg-[#f5f5f5] py-28"
+            className="relative overflow-hidden bg-[#F2EDC2] py-28"
         >
             {/* Subtle background texture */}
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.8),transparent_70%)]" />
@@ -224,8 +212,8 @@ export default function HowItWorks() {
                 >
                     <div className="relative overflow-hidden">
                         {/* Gradient masks */}
-                        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-24 bg-gradient-to-r from-[#f5f5f5] to-transparent" />
-                        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-[#f5f5f5] to-transparent" />
+                        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-24 bg-gradient-to-r from-[#F2EDC2] to-transparent" />
+                        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-[#F2EDC2] to-transparent" />
 
                         <div className="flex animate-[marquee_30s_linear_infinite] gap-4">
                             {[...marqueeItems, ...marqueeItems].map(({ label, icon: MIcon }, i) => (

@@ -24,7 +24,7 @@ export default function Pricing() {
     }, []);
 
     return (
-        <section ref={sectionRef} className="relative overflow-hidden bg-[#f5f5f5] pt-16 pb-24">
+        <section ref={sectionRef} className="relative overflow-hidden bg-[#F2EDC2] pt-16 pb-24">
             <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 {/* ── Pricing Section ───────────────────────────── */}
                 <div
