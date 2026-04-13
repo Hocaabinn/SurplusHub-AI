@@ -1,36 +1,36 @@
 /**
  * Smart Dynamic Pricing Engine (AI-Driven)
  * 
- * Menghitung harga real-time berdasarkan sisa waktu menuju expiry_date.
- * Semakin dekat waktu kadaluarsa, harga semakin turun untuk zero waste.
+ * Calculates real-time pricing based on remaining time until expiry_date.
+ * The closer it gets to expiration, the lower the price for zero waste outcomes.
  * 
- * Menggunakan sigmoid-like curve agar transisi harga terasa natural.
+ * Uses a sigmoid-like curve to keep price transitions smooth and natural.
  */
 
 export interface DynamicPriceResult {
-    /** Harga saat ini setelah dynamic pricing */
+    /** Current price after dynamic pricing */
     currentPrice: number;
-    /** Harga final setelah diskon seller (originalPrice - discountAmount) */
+    /** Final seller price after seller discount (originalPrice - discountAmount) */
     sellerFinalPrice: number;
-    /** Persentase diskon seller dari harga original (0-100) */
+    /** Seller discount percentage from original price (0-100) */
     sellerDiscountPercent: number;
-    /** Harga original */
+    /** Original price */
     originalPrice: number;
-    /** Persentase diskon total dari harga original (0-100) */
+    /** Total discount percentage from original price (0-100) */
     totalDiscountPercent: number;
-    /** Persentase dynamic discount tambahan dari AI (0-100), di atas seller discount */
+    /** Additional AI dynamic discount percentage (0-100), above seller discount */
     dynamicDiscountPercent: number;
     /** Label urgency: 'normal' | 'dropping' | 'flash-sale' | 'last-chance' */
     urgencyLabel: 'normal' | 'dropping' | 'flash-sale' | 'last-chance';
-    /** Warna gradient untuk UI */
+    /** UI gradient color */
     urgencyColor: string;
-    /** Icon emoji */
+    /** Emoji icon */
     urgencyIcon: string;
-    /** Time ratio (1.0 = baru mulai, 0.0 = sudah expired) */
+    /** Time ratio (1.0 = just started, 0.0 = already expired) */
     timeRatio: number;
-    /** Sisa jam */
+    /** Remaining hours */
     hoursLeft: number;
-    /** Apakah sudah expired */
+    /** Whether the item is expired */
     isExpired: boolean;
 }
 
@@ -54,10 +54,10 @@ function easeInOut(t: number): number {
 /**
  * Calculate dynamic price based on time remaining
  * 
- * @param originalPrice - Harga asli produk
- * @param discountAmount - Potongan harga nominal dari seller (dalam Rupiah)
- * @param expiryDate - Waktu kadaluarsa
- * @param createdAt - Waktu listing dibuat (optional, defaults to 24h before expiry)
+ * @param originalPrice - Product original price
+ * @param discountAmount - Seller nominal discount amount (in Rupiah)
+ * @param expiryDate - Expiration time
+ * @param createdAt - Listing creation time (optional, defaults to 24h before expiry)
  */
 export function calculateDynamicPrice(
     originalPrice: number,
@@ -201,13 +201,13 @@ export function calculateDynamicPrice(
 export function getDynamicPriceLabel(result: DynamicPriceResult): string {
     switch (result.urgencyLabel) {
         case 'normal':
-            return 'Harga Stabil';
+            return 'Stable Price';
         case 'dropping':
-            return 'Harga Turun';
+            return 'Price Dropping';
         case 'flash-sale':
             return 'Flash Sale';
         case 'last-chance':
-            return 'Kesempatan Terakhir!';
+            return 'Last Chance!';
     }
 }
 
@@ -216,16 +216,16 @@ export function getDynamicPriceLabel(result: DynamicPriceResult): string {
  */
 export function getDynamicPriceDescription(result: DynamicPriceResult): string {
     if (result.isExpired) {
-        return 'Produk sudah melewati batas waktu. Harga terendah!';
+        return 'This item has passed its pickup window. Lowest possible price unlocked.';
     }
     switch (result.urgencyLabel) {
         case 'normal':
-            return 'AI mempertahankan harga stabil karena masih banyak waktu tersisa.';
+            return 'AI is keeping the price stable because there is still plenty of time left.';
         case 'dropping':
-            return `AI menurunkan harga ${result.dynamicDiscountPercent}% ekstra untuk mendorong pembelian.`;
+            return `AI lowered the price by an extra ${result.dynamicDiscountPercent}% to accelerate conversions.`;
         case 'flash-sale':
-            return `⚡ Flash Sale! AI memberikan diskon agresif ${result.dynamicDiscountPercent}% untuk zero waste.`;
+            return `⚡ Flash Sale! AI applied an aggressive ${result.dynamicDiscountPercent}% boost to maximize rescue potential.`;
         case 'last-chance':
-            return `🔥 Harga terendah! AI memaksimalkan diskon ${result.dynamicDiscountPercent}% agar tidak terbuang.`;
+            return `🔥 Lowest price now! AI pushed discounts up to ${result.dynamicDiscountPercent}% to avoid food waste.`;
     }
 }

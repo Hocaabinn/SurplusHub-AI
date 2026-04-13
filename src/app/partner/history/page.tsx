@@ -68,7 +68,7 @@ export default function PartnerHistoryPage() {
         .eq('owner_id', user.id);
 
       if (storesError) {
-        setError('Gagal memuat daftar toko partner.');
+        setError('Failed to load merchant store list.');
         setLoading(false);
         return;
       }
@@ -86,7 +86,7 @@ export default function PartnerHistoryPage() {
         .in('store_id', storeIds);
 
       if (productsError) {
-        setError('Gagal memuat daftar produk partner.');
+        setError('Failed to load merchant product list.');
         setLoading(false);
         return;
       }
@@ -121,7 +121,7 @@ export default function PartnerHistoryPage() {
         .limit(20);
 
       if (ordersError) {
-        setError('Gagal memuat riwayat transaksi.');
+        setError('Failed to load transaction history.');
         setLoading(false);
         return;
       }
@@ -149,9 +149,9 @@ export default function PartnerHistoryPage() {
               <Clock className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Riwayat Transaksi</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Transaction History</h1>
               <p className="text-sm text-gray-500">
-                Status pesanan ditampilkan langsung dari tabel orders.
+                Order statuses are shown directly from the orders table.
               </p>
             </div>
           </div>
@@ -166,7 +166,7 @@ export default function PartnerHistoryPage() {
             <div className="flex items-center gap-3 rounded-2xl bg-red-50 p-6 text-red-700">
               <AlertCircle className="h-6 w-6 shrink-0" />
               <div>
-                <h3 className="font-semibold">Terjadi Kesalahan</h3>
+                <h3 className="font-semibold">Something Went Wrong</h3>
                 <p className="mt-1 text-sm text-red-600">{error}</p>
               </div>
             </div>
@@ -175,15 +175,15 @@ export default function PartnerHistoryPage() {
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-gray-100 bg-gray-50">
                 <History className="h-8 w-8 text-gray-400" />
               </div>
-              <h3 className="mb-2 text-lg font-semibold text-gray-900">Belum ada riwayat pesanan</h3>
+              <h3 className="mb-2 text-lg font-semibold text-gray-900">No order history yet</h3>
               <p className="mb-6 max-w-sm text-gray-500">
-                Pesanan pelanggan akan muncul di sini dengan status asli dari database.
+                Customer orders will appear here with live status from the database.
               </p>
               <Link
                 href="/merchant"
                 className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-primary-dark"
               >
-                Kembali ke Dashboard
+                Back to Dashboard
               </Link>
             </div>
           ) : (
@@ -231,7 +231,7 @@ export default function PartnerHistoryPage() {
                         </div>
                         <h3 className="text-lg font-bold text-gray-900">{order.products?.title}</h3>
                         <p className="mt-1 text-sm text-gray-500">
-                          {order.quantity} porsi terjual - Total:{' '}
+                          {order.quantity} portions sold - Total:{' '}
                           <span className="font-semibold text-gray-900">
                             Rp {order.total_price.toLocaleString('id-ID')}
                           </span>
@@ -242,10 +242,10 @@ export default function PartnerHistoryPage() {
                         <TrendingUp className="h-5 w-5" />
                         <div>
                           <p className="mb-0.5 text-xs font-medium uppercase tracking-wider text-green-700">
-                            Dampak Positif
+                            Positive Impact
                           </p>
                           <p className="font-bold">
-                            {(order.products?.co2_saved || 0.5 * order.quantity).toFixed(1)} kg CO2 diselamatkan
+                            {(order.products?.co2_saved || 0.5 * order.quantity).toFixed(1)} kg CO2 rescued
                           </p>
                         </div>
                       </div>

@@ -10,18 +10,18 @@ type OrderStatusMeta = {
 
 const ORDER_STATUS_META: Record<OrderStatus, OrderStatusMeta> = {
     pending: {
-        label: 'Menunggu Pengambilan',
+        label: 'Awaiting Pickup',
         badgeClassName:
             'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
     },
     completed: {
-        label: 'Selesai',
+        label: 'Completed',
         partnerLabel: 'Successfully Rescued',
         badgeClassName:
             'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
     },
     cancelled: {
-        label: 'Dibatalkan',
+        label: 'Cancelled',
         badgeClassName:
             'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
     },
@@ -37,7 +37,7 @@ export function getOrderStatusMeta(status: string) {
     }
 
     return {
-        label: 'Status Tidak Valid',
+        label: 'Invalid Status',
         partnerLabel: 'Invalid Status',
         badgeClassName: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
     };

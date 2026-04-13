@@ -30,8 +30,8 @@ interface AiImageGeneratorProps {
 // Predefined AI-generated food image styles
 const STYLE_PRESETS = [
     { id: 'photo', label: 'Food Photo', icon: '📸', prompt: 'professional food photography' },
-    { id: 'illustration', label: 'Ilustrasi', icon: '🎨', prompt: 'watercolor food illustration' },
-    { id: 'minimal', label: 'Minimalis', icon: '⚪', prompt: 'minimal flat design' },
+    { id: 'illustration', label: 'Illustration', icon: '🎨', prompt: 'watercolor food illustration' },
+    { id: 'minimal', label: 'Minimal', icon: '⚪', prompt: 'minimal flat design' },
     { id: 'vibrant', label: 'Vibrant', icon: '🌈', prompt: 'vibrant colorful' },
 ];
 
@@ -219,9 +219,9 @@ export default function AiImageGenerator({
                             AI Image Generator
                         </h3>
                         <p className="mt-1 text-xs text-gray-500 leading-relaxed">
-                            Generate gambar makanan otomatis dengan AI.
+                            Generate food images automatically with AI.
                             <br />
-                            Fitur eksklusif untuk member <span className="font-semibold text-amber-600">Premium</span>.
+                            Premium-exclusive feature for <span className="font-semibold text-amber-600">Premium</span> members.
                         </p>
                     </div>
 
@@ -243,7 +243,7 @@ export default function AiImageGenerator({
                         className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-amber-500/30 transition-all hover:shadow-xl hover:shadow-amber-500/40 hover:brightness-110 active:scale-[0.98]"
                     >
                         <Crown className="h-4 w-4" />
-                        Upgrade ke Premium
+                        Upgrade to Premium
                     </button>
                 </div>
             </div>
@@ -326,7 +326,7 @@ export default function AiImageGenerator({
 
             {!foodTitle.trim() && (
                 <p className="mt-1.5 text-center text-[10px] text-purple-400">
-                    Isi nama makanan terlebih dahulu untuk generate gambar
+                    Enter a food name first to generate an image
                 </p>
             )}
         </div>

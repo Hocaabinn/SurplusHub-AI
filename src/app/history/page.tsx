@@ -38,7 +38,7 @@ export default function OrderHistoryPage() {
                 console.log("Error:", error);
 
                 if (error) {
-                    console.error('Error dari database:', error);
+                    console.error('Database error:', error);
                 }
                 
                 setOrders((data || []) as unknown as Order[]);
@@ -61,7 +61,7 @@ export default function OrderHistoryPage() {
             <div className="min-h-screen bg-gray-50 pb-12 pt-8 dark:bg-[#0a0f0a]">
                 <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                     <h1 className="mb-8 text-3xl font-bold text-gray-900 dark:text-white">
-                        Riwayat Pesanan
+                        Order History
                     </h1>
 
                     {loading ? (
@@ -76,10 +76,10 @@ export default function OrderHistoryPage() {
                                 <ShoppingBag className="h-8 w-8 text-primary" />
                             </div>
                             <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
-                                Belum ada pesanan
+                                No orders yet
                             </h3>
                             <p className="text-gray-500 dark:text-gray-400">
-                                Belum ada makanan yang berhasil di-rescue pelanggan. Ayo terus update stok surplusmu!
+                                No rescued orders yet. Keep your surplus listings fresh to drive more demand.
                             </p>
                         </div>
                     ) : (
@@ -137,11 +137,11 @@ export default function OrderHistoryPage() {
                                     {order.status === 'pending' && (
                                         <div className="border-t border-gray-100 bg-orange-50/50 px-6 py-3 dark:border-gray-800 dark:bg-orange-900/10">
                                             <p className="flex items-center gap-2 text-sm text-orange-700 dark:text-orange-400">
-                                                <span className="font-medium">Kode Pickup:</span>
+                                                <span className="font-medium">Pickup Code:</span>
                                                 <code className="rounded bg-white px-2 py-0.5 font-mono text-base font-bold tracking-wider dark:bg-black">
                                                     {order.pickup_code}
                                                 </code>
-                                                <span className="hidden sm:inline">- Tunjukkan kode ini ke petugas toko saat pengambilan.</span>
+                                                <span className="hidden sm:inline">- Show this code to store staff during pickup.</span>
                                             </p>
                                         </div>
                                     )}

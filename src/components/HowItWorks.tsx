@@ -10,33 +10,33 @@ const steps = [
     {
         icon: Search,
         step: '01',
-        title: 'Pilih Makanan',
+        title: 'Discover Surplus',
         description:
-            'Temukan surplus makanan berkualitas dari toko-toko favoritmu di sekitar lokasi dengan cepat dan mudah.',
+            'Find quality surplus meals from your favorite nearby merchants in seconds.',
         image: '/Fitur2.mp4',
     },
     {
         icon: Wallet,
         step: '02',
-        title: 'Pesan & Bayar',
+        title: 'Reserve & Pay',
         description:
-            'Amankan porsimu dengan harga yang jauh lebih hemat. Bayar langsung dari aplikasi.',
+            'Secure your portion at a smarter price and pay instantly in-app.',
         image: '/Fitur1.mp4',
     },
     {
         icon: Store,
         step: '03',
-        title: 'Ambil di Lokasi',
+        title: 'Instant Pickup',
         description:
-            'Kunjungi toko pada waktu yang ditentukan untuk pickup pesananmu.',
+            'Head to the merchant at the scheduled time and pick up your order.',
         image: '/Fitur3.mp4',
     },
 ];
 
 const pricingPhases = [
     {
-        label: 'Harga Stabil',
-        time: '> 6 jam',
+        label: 'Stable Price',
+        time: '> 6 hours',
         discount: '0-5%',
         color: 'bg-emerald-500',
         textColor: 'text-emerald-700',
@@ -45,8 +45,8 @@ const pricingPhases = [
         width: 'w-2/5',
     },
     {
-        label: 'Harga Turun',
-        time: '2-6 jam',
+        label: 'Price Drop',
+        time: '2-6 hours',
         discount: '5-25%',
         color: 'bg-amber-500',
         textColor: 'text-amber-700',
@@ -66,7 +66,7 @@ const pricingPhases = [
     },
     {
         label: 'Last Chance!',
-        time: '< 1 jam',
+        time: '< 1 hour',
         discount: '45-65%',
         color: 'bg-red-500',
         textColor: 'text-red-700',
@@ -79,11 +79,11 @@ const pricingPhases = [
 const marqueeItems = [
     { label: 'Smart Pricing', icon: Brain },
     { label: 'Zero Waste', icon: Recycle },
-    { label: 'Hemat Hingga 65%', icon: Sparkles },
-    { label: 'Ramah Lingkungan', icon: Leaf },
-    { label: 'Aman & Terpercaya', icon: ShieldCheck },
-    { label: 'Pickup Cepat', icon: Clock },
-    { label: 'Selamatkan Makanan', icon: Heart },
+    { label: 'Save Up to 65%', icon: Sparkles },
+    { label: 'Eco Friendly', icon: Leaf },
+    { label: 'Safe & Trusted', icon: ShieldCheck },
+    { label: 'Fast Pickup', icon: Clock },
+    { label: 'Rescue More Food', icon: Heart },
 ];
 
 /* ─── Component ──────────────────────────────────────────────────────── */
@@ -122,17 +122,17 @@ export default function HowItWorks() {
                 >
                     <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-2 text-xs font-bold uppercase tracking-[0.2em] text-gray-800 shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
                         <Sparkles className="h-3.5 w-3.5" />
-                        Cara Kerja
+                        How It Works
                     </span>
 
                     <h2 className="font-display text-4xl font-bold tracking-tight text-gray-900 sm:text-[3.25rem] sm:leading-[1.15]">
-                        Menyelamatkan Makanan
+                        Food Rescue
                         <br />
-                        Jadi Lebih Mudah
+                        Made Simple
                     </h2>
 
                     <p className="mx-auto mt-6 max-w-xl text-base text-gray-500 leading-relaxed">
-                        Tiga langkah sederhana untuk mendapatkan makanan berkualitas dengan harga hemat.
+                        Three simple steps to get quality food at a better price.
                     </p>
                 </div>
 
@@ -188,7 +188,7 @@ export default function HowItWorks() {
                                         <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-[#2D5A27] shadow-sm">
                                             <Icon className="h-3.5 w-3.5" strokeWidth={2.5} />
                                         </div>
-                                        Langkah {step}
+                                        Step {step}
                                     </div>
 
                                     <h3 className="font-display text-2xl font-bold text-gray-900 tracking-tight transition-colors duration-300 group-hover:text-[#2D5A27]">

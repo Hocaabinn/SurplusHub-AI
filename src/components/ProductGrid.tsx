@@ -75,28 +75,28 @@ export default function ProductGrid({ selectedStoreId }: ProductGridProps) {
 
                 <h3 className="mb-2 text-xl font-bold text-gray-800">
                     {selectedStoreId
-                        ? 'Toko ini sedang kehabisan stok'
-                        : 'Belum ada makanan tersedia saat ini'}
+                        ? 'This store is currently out of stock'
+                        : 'No meals available right now'}
                 </h3>
                 <p className="mb-8 max-w-xs text-sm leading-relaxed text-gray-500">
                     {selectedStoreId
-                        ? 'Coba toko lain atau pantau terus — stok baru sering datang setiap hari!'
-                        : 'Stok makanan dari toko-toko lokal biasanya diperbarui tiap hari. Tetap pantau ya!'}
+                        ? 'Try another merchant or check back soon, new stock drops daily.'
+                        : 'Local merchant inventory refreshes often. Stay tuned for new rescues.'}
                 </p>
 
                 {/* CTA Buttons */}
                 <div className="flex flex-col gap-3 sm:flex-row">
                     <button
-                        onClick={() => alert('Fitur notifikasi segera hadir!')}
+                        onClick={() => alert('Notification feature coming soon!')}
                         className="inline-flex items-center justify-center gap-2 rounded-full bg-green-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-green-600 hover:shadow-md active:scale-95"
                     >
-                        🔔 Ingatkan Saya Jika Ada Stok
+                        🔔 Notify Me When Stock Is Back
                     </button>
                     <button
                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                         className="inline-flex items-center justify-center gap-2 rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-600 shadow-sm transition-all hover:border-green-200 hover:bg-green-50 hover:text-green-700 active:scale-95"
                     >
-                        🗺️ Lihat Toko Mitra Terdekat
+                        🗺️ View Nearby Partner Stores
                     </button>
                 </div>
             </div>

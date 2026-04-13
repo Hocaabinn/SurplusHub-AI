@@ -28,7 +28,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-gray-300 text-sm leading-relaxed mb-8 max-w-sm font-light">
-              Menyelamatkan makanan surplus dari toko lokal dengan harga diskon. Kurangi limbah pangan dan hemat pengeluaran sambil membantu pelestarian lingkungan.
+              Rescuing quality surplus food from local merchants at smart prices. Reduce food waste, save more, and create real environmental impact.
             </p>
             <div className="flex items-center gap-3 w-full">
               <a href="#" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 border border-white/10 text-gray-300 hover:bg-green-500 hover:text-white hover:border-green-500 transition-all duration-300 hover:-translate-y-1 shadow-sm">
@@ -57,12 +57,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/#marketplace" className="text-gray-400 hover:text-green-400 hover:translate-x-1 inline-flex transition-all duration-300 text-sm">
-                  Jelajahi Makanan
+                  Explore Surplus
                 </Link>
               </li>
               <li>
                 <Link href="/#how-it-works" className="text-gray-400 hover:text-green-400 hover:translate-x-1 inline-flex transition-all duration-300 text-sm">
-                  Cara Kerja
+                  How It Works
                 </Link>
               </li>
               <li>
@@ -79,17 +79,17 @@ export default function Footer() {
             <ul className="flex flex-col gap-3 font-light">
               <li>
                 <Link href="/merchant" className="text-gray-400 hover:text-green-400 hover:translate-x-1 inline-flex transition-all duration-300 text-sm">
-                  Untuk Merchant
+                  For Merchants
                 </Link>
               </li>
               <li>
                 <Link href="/partner" className="text-gray-400 hover:text-green-400 hover:translate-x-1 inline-flex transition-all duration-300 text-sm">
-                  Menjadi Partner
+                  Become a Partner
                 </Link>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-green-400 hover:translate-x-1 inline-flex transition-all duration-300 text-sm">
-                  Pusat Bantuan
+                  Help Center
                 </a>
               </li>
             </ul>
@@ -102,7 +102,7 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 text-green-400 shrink-0 mt-0.5" />
                 <span className="text-gray-400 text-sm">
-                  Surabaya,Jawa timur, Indonesia <br />
+                  Surabaya, East Java, Indonesia <br />
                 </span>
               </li>
               <li className="flex items-center gap-3">

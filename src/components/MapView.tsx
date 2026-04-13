@@ -160,7 +160,7 @@ export default function MapView({ selectedStoreId, onMarkerClick }: MapViewProps
                                                 <Package className="h-3 w-3" />
                                             </div>
                                             <span className="font-semibold text-gray-800">{totalStock}</span>
-                                            <span className="text-xs text-gray-500">porsi food rescue</span>
+                                            <span className="text-xs text-gray-500">rescue portions</span>
                                         </div>
                                     </div>
 
@@ -176,7 +176,7 @@ export default function MapView({ selectedStoreId, onMarkerClick }: MapViewProps
                                             onClick={() => onMarkerClick(store.id)}
                                         >
                                             <Navigation className="w-3 h-3 mr-1.5" />
-                                            Lihat Produk
+                                            View Products
                                         </Button>
                                         <Button
                                             size="sm"

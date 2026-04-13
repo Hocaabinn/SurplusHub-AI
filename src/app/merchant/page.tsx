@@ -282,7 +282,7 @@ export default function DashboardPage() {
         let uploadedFilePath: string | null = null;
 
         try {
-            if (!user) throw new Error('Anda harus login.');
+            if (!user) throw new Error('You must be logged in.');
             if (!foodForm.store_id) throw new Error('Please select a store.');
             const origPrice = Number(foodForm.original_price);
             const discAmt = Number(foodForm.discount_amount);
@@ -809,7 +809,7 @@ export default function DashboardPage() {
                                     <div className="h-px flex-1 bg-gray-200" />
                                     <span className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">
                                         <Brain className="h-3 w-3" />
-                                        atau
+                                        or
                                     </span>
                                     <div className="h-px flex-1 bg-gray-200" />
                                 </div>

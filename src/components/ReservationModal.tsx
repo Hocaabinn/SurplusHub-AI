@@ -119,7 +119,7 @@ export default function ReservationModal({
             <div className="animate-scale-in w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl">
                 <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
                     <h2 className="text-lg font-bold text-gray-900">
-                        {pickupCode ? 'Rescue Berhasil!' : 'Rescue This Food'}
+                        {pickupCode ? 'Rescue Confirmed!' : 'Rescue This Food'}
                     </h2>
                     <button
                         onClick={onClose}
@@ -170,13 +170,13 @@ export default function ReservationModal({
                             </div>
 
                             <div>
-                                <h3 className="text-2xl font-bold text-gray-900">Rescue Berhasil!</h3>
-                                <p className="mt-1 text-sm text-muted">Pesanan kamu telah dikonfirmasi</p>
+                                <h3 className="text-2xl font-bold text-gray-900">Rescue Confirmed!</h3>
+                                <p className="mt-1 text-sm text-muted">Your order has been confirmed</p>
                             </div>
 
                             <div className="w-full rounded-2xl border-2 border-dashed border-green-300 bg-green-50/80 p-5 dark:border-green-700 dark:bg-green-900/20">
                                 <p className="mb-2 text-xs font-medium uppercase tracking-wider text-green-600 dark:text-green-400">
-                                    Kode Pickup
+                                    Pickup Code
                                 </p>
                                 <div className="flex items-center justify-center gap-3">
                                     <span className="font-mono text-4xl font-black tracking-[0.3em] text-gray-900 dark:text-white">
@@ -185,7 +185,7 @@ export default function ReservationModal({
                                     <button
                                         onClick={handleCopyCode}
                                         className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-gray-500 shadow-sm transition-all hover:bg-green-100 hover:text-green-600"
-                                        title="Salin kode"
+                                        title="Copy code"
                                     >
                                         {copied ? (
                                             <Check className="h-5 w-5 text-green-500" />
@@ -196,14 +196,14 @@ export default function ReservationModal({
                                 </div>
                                 {copied && (
                                     <p className="mt-2 text-xs font-medium text-green-600 dark:text-green-400">
-                                        Kode disalin.
+                                        Code copied.
                                     </p>
                                 )}
                             </div>
 
                             <div className="w-full space-y-3 rounded-xl bg-gray-50 p-4 text-left">
                                 <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                                    Detail Pesanan
+                                    Order Details
                                 </p>
                                 <div className="flex items-center justify-between text-sm">
                                     <div className="flex items-center gap-2">
@@ -225,8 +225,8 @@ export default function ReservationModal({
                             <div className="flex w-full items-center gap-3 rounded-xl bg-amber-50 px-4 py-3 text-left dark:bg-amber-900/15">
                                 <MapPin className="h-5 w-5 flex-shrink-0 text-amber-500" />
                                 <p className="text-sm text-amber-700 dark:text-amber-400">
-                                    Tunjukkan kode ini di{' '}
-                                    <strong>{product.stores?.name || 'toko'}</strong> untuk mengambil pesananmu.
+                                    Show this code at{' '}
+                                    <strong>{product.stores?.name || 'store'}</strong> to collect your order.
                                 </p>
                             </div>
 
@@ -236,7 +236,7 @@ export default function ReservationModal({
                                     className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-dark px-4 py-3.5 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all hover:shadow-xl hover:shadow-green-500/30 hover:brightness-110"
                                 >
                                     <Clock className="h-4 w-4" />
-                                    Lihat Pesanan Saya
+                                    View My Orders
                                 </Link>
                                 <button
                                     onClick={() => {
@@ -245,7 +245,7 @@ export default function ReservationModal({
                                     }}
                                     className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-50"
                                 >
-                                    Tutup
+                                    Close
                                 </button>
                             </div>
                         </div>

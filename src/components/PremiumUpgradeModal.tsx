@@ -12,10 +12,10 @@ interface PremiumUpgradeModalProps {
 }
 
 const PREMIUM_FEATURES = [
-    { icon: <Wand2 className="h-5 w-5" />, title: 'AI Image Generator', description: 'Generate gambar makanan otomatis' },
-    { icon: <TrendingUp className="h-5 w-5" />, title: 'Advanced Analytics', description: 'Insight AI untuk bisnis Anda' },
-    { icon: <Shield className="h-5 w-5" />, title: 'Priority Support', description: 'Respons lebih cepat dari tim kami' },
-    { icon: <Zap className="h-5 w-5" />, title: 'Smart Recommendations', description: 'Rekomendasi harga optimal' },
+    { icon: <Wand2 className="h-5 w-5" />, title: 'AI Image Generator', description: 'Auto-generate high-quality food visuals' },
+    { icon: <TrendingUp className="h-5 w-5" />, title: 'Advanced Analytics', description: 'AI-powered insights for your business' },
+    { icon: <Shield className="h-5 w-5" />, title: 'Priority Support', description: 'Faster response from our team' },
+    { icon: <Zap className="h-5 w-5" />, title: 'Smart Recommendations', description: 'Optimized pricing recommendations' },
 ];
 
 export default function PremiumUpgradeModal({ isOpen, onClose, onUpgradeSuccess }: PremiumUpgradeModalProps) {
@@ -26,14 +26,14 @@ export default function PremiumUpgradeModal({ isOpen, onClose, onUpgradeSuccess 
 
     if (!isOpen) return null;
 
-    // FUNGSI UNTUK UPGRADE INSTAN (FAKE PAYMENT)
+    // Instant upgrade flow (mock payment)
     async function handleUpgrade() {
         if (!user) return;
         setUpgrading(true);
         setError(null);
 
         try {
-            // Langsung paksa update is_premium di database
+            // Force-update is_premium in the database
             const { error: updateError } = await supabase
                 .from('profiles')
                 .update({ is_premium: true })
@@ -43,12 +43,12 @@ export default function PremiumUpgradeModal({ isOpen, onClose, onUpgradeSuccess 
 
             setSuccess(true);
             setTimeout(() => {
-                onUpgradeSuccess(); // Memicu refresh data user di parent
+                onUpgradeSuccess(); // Triggers user data refresh in parent
                 onClose();
                 setSuccess(false);
             }, 2000);
         } catch (err) {
-            setError('Terjadi kesalahan koneksi.');
+            setError('Connection error. Please try again.');
         } finally {
             setUpgrading(false);
         }
@@ -70,9 +70,9 @@ export default function PremiumUpgradeModal({ isOpen, onClose, onUpgradeSuccess 
 
                     <div className="mb-6 text-center">
                         <h2 className="text-2xl font-extrabold text-gray-900">
-                            Upgrade ke <span className="bg-amber-500 text-white px-2 py-0.5 rounded-lg">Premium</span>
+                            Upgrade to <span className="bg-amber-500 text-white px-2 py-0.5 rounded-lg">Premium</span>
                         </h2>
-                        <p className="mt-1.5 text-sm text-gray-500">Buka akses AI Image Generator sekarang</p>
+                        <p className="mt-1.5 text-sm text-gray-500">Unlock AI Image Generator today</p>
                     </div>
 
                     {success ? (
@@ -81,8 +81,8 @@ export default function PremiumUpgradeModal({ isOpen, onClose, onUpgradeSuccess 
                                 <Check className="h-10 w-10" />
                             </div>
                             <div className="text-center">
-                                <h3 className="text-xl font-bold text-gray-900">🎉 Berhasil!</h3>
-                                <p className="text-sm text-gray-500">Akun Anda kini sudah Premium</p>
+                                <h3 className="text-xl font-bold text-gray-900">Success!</h3>
+                                <p className="text-sm text-gray-500">Your account is now Premium</p>
                             </div>
                         </div>
                     ) : (
@@ -106,7 +106,7 @@ export default function PremiumUpgradeModal({ isOpen, onClose, onUpgradeSuccess 
                                 disabled={upgrading}
                                 className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 px-4 py-4 text-white font-bold shadow-lg hover:brightness-110 transition-all active:scale-95 disabled:opacity-70"
                             >
-                                {upgrading ? <Loader2 className="animate-spin" /> : "Aktifkan Premium Sekarang"}
+                                {upgrading ? <Loader2 className="animate-spin" /> : "Activate Premium Now"}
                             </button>
                         </>
                     )}

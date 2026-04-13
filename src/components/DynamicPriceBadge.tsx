@@ -148,11 +148,11 @@ export default function DynamicPriceBadge({
                     {/* Price breakdown */}
                     <div className="mt-2 space-y-1">
                         <div className="flex items-center justify-between">
-                            <span>Harga Asli</span>
+                            <span>Original Price</span>
                             <span className="font-medium line-through">Rp{originalPrice.toLocaleString('id-ID')}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                            <span>Diskon Partner</span>
+                            <span>Partner Discount</span>
                             <span className="font-medium">Rp{priceResult.sellerFinalPrice.toLocaleString('id-ID')} ({priceResult.sellerDiscountPercent}%)</span>
                         </div>
                         {priceResult.dynamicDiscountPercent > 0 && (
@@ -169,7 +169,7 @@ export default function DynamicPriceBadge({
                     {/* Progress bar showing time */}
                     <div className="mt-2.5">
                         <div className="mb-1 flex items-center justify-between text-[10px]">
-                            <span>Sisa waktu</span>
+                            <span>Time left</span>
                             <span className="font-mono">{priceResult.hoursLeft.toFixed(1)}h</span>
                         </div>
                         <div className="h-1.5 overflow-hidden rounded-full bg-current/10">

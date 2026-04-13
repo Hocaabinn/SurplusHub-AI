@@ -71,7 +71,7 @@ export default function PartnerRedeemPage() {
             if (!orders || orders.length === 0) {
                 setResult({
                     success: false,
-                    message: 'Kode pickup tidak ditemukan. Mohon periksa kembali.'
+                    message: 'Pickup code not found. Please double-check and try again.'
                 });
                 return;
             }
@@ -86,7 +86,7 @@ export default function PartnerRedeemPage() {
             if ((normalizedProduct as { stores?: { owner_id?: string } } | null)?.stores?.owner_id !== user.id) {
                 setResult({
                     success: false,
-                    message: 'Pesanan ini tidak terdaftar pada toko Anda.'
+                    message: 'This order is not registered to your store.'
                 });
                 return;
             }
@@ -95,7 +95,7 @@ export default function PartnerRedeemPage() {
             if (normalizedOrder.status === 'completed') {
                 setResult({
                     success: false,
-                    message: 'Pesanan ini sudah diambil sebelumnya.',
+                    message: 'This order has already been picked up.',
                     order: normalizedOrder
                 });
                 return;
@@ -104,7 +104,7 @@ export default function PartnerRedeemPage() {
             if (normalizedOrder.status === 'cancelled') {
                 setResult({
                     success: false,
-                    message: 'Pesanan ini telah dibatalkan.',
+                    message: 'This order has been cancelled.',
                     order: normalizedOrder
                 });
                 return;
@@ -120,7 +120,7 @@ export default function PartnerRedeemPage() {
 
             setResult({
                 success: true,
-                message: 'Pesanan berhasil diverifikasi dan diselesaikan!',
+                message: 'Order successfully verified and completed!',
                 order: { ...normalizedOrder, status: 'completed' }
             });
             setPickupCode('');
@@ -129,7 +129,7 @@ export default function PartnerRedeemPage() {
             console.error('Redeem error:', err);
             setResult({
                 success: false,
-                message: 'Terjadi kesalahan sistem. Silakan coba lagi.'
+                message: 'A system error occurred. Please try again.'
             });
         } finally {
             setLoading(false);
@@ -145,10 +145,10 @@ export default function PartnerRedeemPage() {
                             <ScanBarcode className="h-8 w-8 text-white" />
                         </div>
                         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                            Redeem Pesanan
+                            Redeem Order
                         </h1>
                         <p className="mt-2 text-gray-600 dark:text-gray-400">
-                            Masukkan kode pickup dari pelanggan untuk menyelesaikan pesanan.
+                            Enter the customer pickup code to complete the order.
                         </p>
                     </div>
 
@@ -166,7 +166,7 @@ export default function PartnerRedeemPage() {
                                             id="pickup-code"
                                             value={pickupCode}
                                             onChange={(e) => setPickupCode(e.target.value.toUpperCase())}
-                                            placeholder="Masukkan Kode Pickup (Contoh: A1B2C3)"
+                                            placeholder="Enter Pickup Code (Example: A1B2C3)"
                                             className="block w-full rounded-xl border-gray-200 bg-gray-50 py-3.5 pl-11 pr-4 text-lg font-mono font-bold tracking-wider text-gray-900 placeholder-gray-400 focus:border-primary focus:ring-primary dark:border-gray-800 dark:bg-gray-800 dark:text-white"
                                             disabled={loading}
                                         />
@@ -177,7 +177,7 @@ export default function PartnerRedeemPage() {
                                     disabled={loading || !pickupCode.trim()}
                                     className="flex w-full items-center justify-center rounded-xl bg-primary py-3.5 text-sem font-bold text-white shadow-lg shadow-green-500/20 transition-all hover:bg-primary-dark hover:shadow-xl hover:shadow-green-500/30 disabled:opacity-70 disabled:shadow-none"
                                 >
-                                    {loading ? 'Memproses...' : 'Verifikasi Kode'}
+                                    {loading ? 'Processing...' : 'Verify Code'}
                                 </button>
                             </form>
                         </div>
@@ -197,7 +197,7 @@ export default function PartnerRedeemPage() {
                                 )}
                                 <h3 className={`font-semibold ${result.success ? 'text-green-800 dark:text-green-300' : 'text-red-800 dark:text-red-300'
                                     }`}>
-                                    {result.success ? 'Berhasil Di-redeem!' : 'Gagal Memproses'}
+                                    {result.success ? 'Successfully Redeemed!' : 'Unable to Process'}
                                 </h3>
                             </div>
 
@@ -222,7 +222,7 @@ export default function PartnerRedeemPage() {
                                                 </h4>
                                                 <div className="mt-1 flex items-center gap-2 text-sm text-gray-500">
                                                     <Package className="h-4 w-4" />
-                                                    <span>{result.order.quantity} porsi</span>
+                                                    <span>{result.order.quantity} portion(s)</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -231,7 +231,7 @@ export default function PartnerRedeemPage() {
                                             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                                                 <UserIcon className="h-4 w-4" />
                                                 <span className="font-medium">
-                                                    Pemesan: {result.order.profiles?.full_name || 'User'}
+                                                    Customer: {result.order.profiles?.full_name || 'User'}
                                                 </span>
                                             </div>
                                         </div>
