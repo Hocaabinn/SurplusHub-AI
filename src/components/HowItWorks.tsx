@@ -109,7 +109,7 @@ export default function HowItWorks() {
     return (
         <section
             ref={sectionRef}
-            className="relative overflow-hidden bg-[#F2EDC2] py-28"
+            className="relative overflow-hidden bg-[#F0F2EE] py-28"
         >
             {/* Subtle background texture */}
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.8),transparent_70%)]" />
@@ -212,8 +212,8 @@ export default function HowItWorks() {
                 >
                     <div className="relative overflow-hidden">
                         {/* Gradient masks */}
-                        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-24 bg-gradient-to-r from-[#F2EDC2] to-transparent" />
-                        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-[#F2EDC2] to-transparent" />
+                        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-24 bg-gradient-to-r from-[#F0F2EE] to-transparent" />
+                        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-[#F0F2EE] to-transparent" />
 
                         <div className="flex animate-[marquee_30s_linear_infinite] gap-4">
                             {[...marqueeItems, ...marqueeItems].map(({ label, icon: MIcon }, i) => (
